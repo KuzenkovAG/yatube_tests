@@ -1,20 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
-from users.forms import CreationForm
 
 User = get_user_model()
 
 
 def get_count_users():
-    return User.objects.all().count()
+    return User.objects.count()
 
 
 class TestUserForm(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.form = CreationForm()
         cls.guest_client = Client()
 
     def test_create_user(self):

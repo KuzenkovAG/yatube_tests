@@ -90,25 +90,27 @@ class TestViews(TestCase):
         post_object = response.context.get('post')
         self.assertEqual(post_object.id, self.post.id)
 
-    def test_post_create_page_form(self):
-        """Context on page of creating post."""
+    def test_post_create_and_edit_pages_form(self):
+        """Context on page of creating post and editing post."""
+        urls = [
+            reverse('posts:post_create'),
+            reverse('posts:post_edit', args=[self.post.id])
+        ]
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.models.ModelChoiceField,
         }
-        response = self.authorized_client.get(reverse('posts:post_create'))
-        for value, expected in form_fields.items():
-            with self.subTest(value=value):
-                form_field = response.context.get('form').fields.get(value)
-                self.assertIsInstance(form_field, expected)
-
-    def test_post_change_page_form(self):
-        """Page of change form used from for creating post."""
-        response = self.authorized_client.get(
-            reverse('posts:post_edit', args=[self.post.id])
-        )
-        form = response.context.get('form')
-        self.assertIsInstance(form, PostForm)
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.authorized_client.get(url)
+                form = response.context.get('form')
+                self.assertIsInstance(form, PostForm)
+                for value, expected in form_fields.items():
+                    with self.subTest(value=value):
+                        form_field = response.context.get('form').fields.get(
+                            value
+                        )
+                        self.assertIsInstance(form_field, expected)
 
 
 class PaginatorViewsTest(TestCase):

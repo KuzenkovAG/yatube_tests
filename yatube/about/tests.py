@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.test import Client, TestCase
 
 
@@ -15,8 +17,8 @@ class UrlTest(TestCase):
         ]
         for url in urls:
             with self.subTest(url=url):
-                result = self.guest_client.get(url)
-                self.assertEqual(result.reason_phrase, 'OK')
+                response = self.guest_client.get(url)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_url_template(self):
         templates = {

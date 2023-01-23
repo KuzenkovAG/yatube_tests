@@ -28,9 +28,11 @@ class PostModelTest(TestCase):
         )
 
     def test_str_short_string(self):
-        self.assertEqual(str(PostModelTest.post), self.post_text_short,
-                         'Ошибка метода str в модели post при отображении '
-                         'короткого текста')
+        self.assertEqual(
+            str(PostModelTest.post),
+            self.post_text_short,
+            'Ошибка метода str в модели post при отображении короткого текста'
+        )
 
     def test_str_long_string(self):
         self.assertEqual(
@@ -47,8 +49,10 @@ class PostModelTest(TestCase):
         }
         for field, expected_value in field_verbose_name.items():
             with self.subTest(field=field):
-                result = PostModelTest.post._meta.get_field(field).verbose_name
-                self.assertEqual(result, expected_value)
+                response = PostModelTest.post._meta.get_field(
+                    field
+                ).verbose_name
+                self.assertEqual(response, expected_value)
 
     def test_help_text(self):
         field_help_text = {
@@ -57,8 +61,8 @@ class PostModelTest(TestCase):
         }
         for field, expected_value in field_help_text.items():
             with self.subTest(field=field):
-                result = PostModelTest.post._meta.get_field(field).help_text
-                self.assertEqual(result, expected_value)
+                response = PostModelTest.post._meta.get_field(field).help_text
+                self.assertEqual(response, expected_value)
 
 
 class GroupModelTest(TestCase):
@@ -73,9 +77,11 @@ class GroupModelTest(TestCase):
         )
 
     def test_str(self):
-        result_str_post = str(GroupModelTest.group)
-        self.assertEqual(result_str_post, self.group_title,
-                         'Ошибка метода str в модели group')
+        self.assertEqual(
+            str(GroupModelTest.group),
+            self.group_title,
+            'Ошибка метода str в модели group'
+        )
 
     def test_verbose_name(self):
         field_verbose_name = {
@@ -85,8 +91,8 @@ class GroupModelTest(TestCase):
         }
         for field, expected_value in field_verbose_name.items():
             with self.subTest(field=field):
-                result = self.group._meta.get_field(field).verbose_name
-                self.assertEqual(result, expected_value)
+                response = self.group._meta.get_field(field).verbose_name
+                self.assertEqual(response, expected_value)
 
     def test_help_text(self):
         field_help_text = {
@@ -97,5 +103,5 @@ class GroupModelTest(TestCase):
         }
         for field, expected_value in field_help_text.items():
             with self.subTest(field=field):
-                result = self.group._meta.get_field(field).help_text
-                self.assertEqual(result, expected_value)
+                response = self.group._meta.get_field(field).help_text
+                self.assertEqual(response, expected_value)
