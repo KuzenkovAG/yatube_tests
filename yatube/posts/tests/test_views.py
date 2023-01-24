@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -54,19 +53,6 @@ class TestViews(TestCase):
                 response = self.authorized_client.get(address)
                 self.assertTemplateUsed(response, template)
 
-    def test_context_title(self):
-        titles = {
-            reverse('posts:post_create'): 'Новый пост',
-            reverse(
-                'posts:post_edit',
-                args=[self.post.id]
-            ): 'Редактировать пост',
-        }
-        for address, title in titles.items():
-            with self.subTest(address=address):
-                response = self.authorized_client.get(address)
-                self.assertEqual(response.context.get('title'), title)
-
     def test_context_list_of_posts(self):
         """Check post lists"""
         url = [
@@ -90,27 +76,23 @@ class TestViews(TestCase):
         post_object = response.context.get('post')
         self.assertEqual(post_object.id, self.post.id)
 
-    def test_post_create_and_edit_pages_form(self):
-        """Context on page of creating post and editing post."""
-        urls = [
-            reverse('posts:post_create'),
-            reverse('posts:post_edit', args=[self.post.id])
-        ]
-        form_fields = {
-            'text': forms.fields.CharField,
-            'group': forms.models.ModelChoiceField,
-        }
-        for url in urls:
-            with self.subTest(url=url):
-                response = self.authorized_client.get(url)
-                form = response.context.get('form')
-                self.assertIsInstance(form, PostForm)
-                for value, expected in form_fields.items():
-                    with self.subTest(value=value):
-                        form_field = response.context.get('form').fields.get(
-                            value
-                        )
-                        self.assertIsInstance(form_field, expected)
+    def test_page_creating_post(self):
+        """Check context of page for create post."""
+        response = self.authorized_client.get(reverse('posts:post_create'))
+        form = response.context.get('form')
+        self.assertIsInstance(form, PostForm)
+        self.assertEqual(response.context.get('title'), 'Новый пост')
+
+    def test_page_edit_post(self):
+        """Check context of page for edit post."""
+        response = self.authorized_client.get(reverse(
+            'posts:post_edit',
+            args=[self.post.id]
+        ))
+        form = response.context.get('form')
+        self.assertIsInstance(form, PostForm)
+        self.assertTrue(response.context.get('is_edit'))
+        self.assertEqual(response.context.get('title'), 'Редактировать пост')
 
 
 class PaginatorViewsTest(TestCase):
