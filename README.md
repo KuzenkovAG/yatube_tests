@@ -1,8 +1,6 @@
 # Yatube v.0.3.0 UnitTest
 Social network. 
 
-### Deployed on server
-[PythonAnyWhere] <- current working version 
 
 ## Features
 - View Posts;
