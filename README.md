@@ -1,4 +1,4 @@
-# Yatube v.1.0.0 New Features
+# Yatube v.0.3.0 UnitTest
 Social network. 
 
 ### Deployed on server
@@ -11,7 +11,7 @@ Social network.
 - Create or Update own posts.
 
 ## New Features
-- Create UnitTest
+- Create test for project
 
 
 
